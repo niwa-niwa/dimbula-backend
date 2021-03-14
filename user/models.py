@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
 
-
 class User(models.Model):
 
     class Meta:
@@ -11,8 +10,9 @@ class User(models.Model):
         verbose_name_plural = 'users'
 
     # firebase uid is not editable
-    id = models.UUIDField(
+    id = models.CharField(
         verbose_name="id",
+        max_length=32,
         primary_key=True,
         unique=True
     )
@@ -21,6 +21,7 @@ class User(models.Model):
     name = models.CharField(
         verbose_name="name",
         max_length=30,
+        null=True
     )
 
     # emailVerified is not editable
@@ -55,7 +56,7 @@ class User(models.Model):
 
     updated_at = models.DateTimeField(
         verbose_name="updated at",
-        default=timezone.now
+        auto_now=True
     )
 
 
