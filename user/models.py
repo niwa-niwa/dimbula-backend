@@ -21,7 +21,6 @@ class User(models.Model):
     name = models.CharField(
         verbose_name="name",
         max_length=30,
-        null=True,
     )
 
     # emailVerified is not editable
@@ -33,7 +32,8 @@ class User(models.Model):
     # firebase photoURL is editable
     photo_url = models.URLField(
         verbose_name='photo url',
-        null=True
+        null=True,
+        blank=True
     )
 
     # firebase prividerId that likes "google.com" is not editable
@@ -60,4 +60,4 @@ class User(models.Model):
 
 
     def __str__(self):
-        return self.title
+        return self.name
