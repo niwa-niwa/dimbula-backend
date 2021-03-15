@@ -13,6 +13,8 @@ from .serializers import UserSerializer
 #     serializer_class = UserSerializer
 
 class UserView(generics.CreateAPIView):
+    serializer_class = UserSerializer
+
     def get(self, request):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
