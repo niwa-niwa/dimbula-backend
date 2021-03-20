@@ -14,7 +14,7 @@ from .serializers import PersonSerializer
 
 class PersonView(generics.CreateAPIView):
     serializer_class = PersonSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
         persons = Person.objects.all()

@@ -69,6 +69,11 @@ class Person(models.Model):
         default=True
     )
 
+    is_authenticated = models.BooleanField(
+        verbose_name="authenticated",
+        default=True
+    )
+
     # last login to the app
     last_login = models.DateTimeField(
         verbose_name="last login at",

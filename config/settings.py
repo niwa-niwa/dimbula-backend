@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -29,7 +28,6 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    # 'firebase_auth',
+    'firebase_auth',
 
     'person.apps.PersonConfig',
     'v1.apps.V1Config',
@@ -132,28 +130,22 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework.authentication.SessionAuthentication',
-#         'firebase_auth.authentication.FirebaseAuthentication',
-#     ]
-# }
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'firebase_auth.authentication.FirebaseAuthentication',
+    ]
+}
 
+# <==== Firebase Authentication settings
 FIREBASE_AUTH_KEY_PATH = BASE_DIR+"/config/dimbula-dev-firebase-admin-sdk.json"
-
 FIREBASE_AUTH = {
-    # allow anonymous requests without Authorization header set
-    'ALLOW_ANONYMOUS_REQUESTS': os.getenv('ALLOW_ANONYMOUS_REQUESTS', False),
     # path to JSON file with firebase secrets
     'FIREBASE_SERVICE_ACCOUNT_KEY':
         os.getenv('FIREBASE_SERVICE_ACCOUNT_KEY', FIREBASE_AUTH_KEY_PATH),
     # allow creation of new local user in db
     'FIREBASE_CREATE_LOCAL_USER':
         os.getenv('FIREBASE_CREATE_LOCAL_USER', True),
-    # attempt to split firebase user.display_name and set local user
-    # first_name and last_name
-    'FIREBASE_ATTEMPT_CREATE_WITH_DISPLAY_NAME':
-        os.getenv('FIREBASE_ATTEMPT_CREATE_WITH_DISPLAY_NAME', True),
     # commonly JWT or Bearer (e.g. JWT <token>)
     'FIREBASE_AUTH_HEADER_PREFIX':
         os.getenv('FIREBASE_AUTH_HEADER_PREFIX', 'Bearer'),
@@ -162,8 +154,6 @@ FIREBASE_AUTH = {
         os.getenv('FIREBASE_CHECK_JWT_REVOKED', True),
     # require that firebase user.email_verified is True
     'FIREBASE_AUTH_EMAIL_VERIFICATION':
-        os.getenv('FIREBASE_AUTH_EMAIL_VERIFICATION', False),
-    # function should accept firebase_admin.auth.UserRecord as argument
-    # and return str
-    #'FIREBASE_USERNAME_MAPPING_FUNC': map_firebase_uid_to_username
+        os.getenv('FIREBASE_AUTH_EMAIL_VERIFICATION', True),
 }
+# ====>
