@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'rest_framework',
     # 'firebase_auth',
 
-    # 'user.apps.UserConfig',
     'person.apps.PersonConfig',
     'v1.apps.V1Config',
 ]
