@@ -1,27 +1,28 @@
 from django.shortcuts import render
 from rest_framework import viewsets, generics
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, permissions
 
-from user.models import User
-from .serializers import UserSerializer
+from person.models import Person
+from .serializers import PersonSerializer
 
 
 # not need
-# class UserViewSet(viewsets.ModelViewSet):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
+# class PersonViewSet(viewsets.ModelViewSet):
+#     queryset = Person.objects.all()
+#     serializer_class = PersonSerializer
 
-class UserView(generics.CreateAPIView):
-    serializer_class = UserSerializer
+class PersonView(generics.CreateAPIView):
+    serializer_class = PersonSerializer
+    # permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        users = User.objects.all()
-        serializer = UserSerializer(users, many=True)
+        persons = Person.objects.all()
+        serializer = PersonSerializer(persons, many=True)
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = UserSerializer(data=request.data)
+        serializer = PersonSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status = status.HTTP_201_CREATED)

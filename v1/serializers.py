@@ -1,17 +1,19 @@
 from rest_framework import serializers
 
-from user.models import User
+from person.models import Person
 
 
-class UserSerializer(serializers.ModelSerializer):
+class PersonSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = Person
         fields = [
             'id',
+            'firebase_id',
             'name',
+            'email',
             'email_verified',
             'photo_url',
             'provider_id',
             'is_admin',
-            'updated_at',
+            'is_active',
         ]

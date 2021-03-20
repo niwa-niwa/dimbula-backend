@@ -11,6 +11,6 @@ app_name = 'v1'
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('users/', views.UserView.as_view(), name='user_list'),
-    path('users/create/', views.UserView.as_view(), name='user_create'),
+    path('persons/', views.PersonView.as_view(), name='person_list'),
+    path('persons/create/', views.PersonView.as_view(), name='person_create'),
 ]
