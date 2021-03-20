@@ -1,7 +1,7 @@
 from django.db import models
 from django.test import TestCase
 from rest_framework import response, serializers, status
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
 from person.models import Person
 from .serializers import PersonSerializer
 
@@ -10,6 +10,16 @@ PERSON_URL = 'http://127.0.0.1:8000/api/v1/persons/'
 # Create your tests here.
 class PersonTest(APITestCase):
 
+    def setUp(self):
+        self.person = Person.objects.create(
+            firebase_id="firebase_user_uid",
+            name="test_name",
+            email="test_email@adb.com",
+            email_verified=True,
+            provider_id="google.com"
+            )
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.person)
 
     def test_getUser(self):
         responce = self.client.get(PERSON_URL)
