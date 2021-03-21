@@ -45,12 +45,12 @@ class TaskFolder(models.Model):
         return self.name
 
 
-class TaskStatus(models.Model):
+class TaskSection(models.Model):
     class Meta:
-        db_table = 'task_status'
+        db_table = 'task_section'
         ordering = ['-created_at']
-        verbose_name = 'task status'
-        verbose_name_plural = 'task statuses'
+        verbose_name = 'task section'
+        verbose_name_plural = 'task sections'
 
     id = models.UUIDField(
         verbose_name="id",
@@ -122,10 +122,23 @@ class Task(models.Model):
         null=True
     )
 
-    taskStatus = models.ForeignKey(
-        TaskStatus,
+    is_done = models.BooleanField(
+        verbose_name='is done',
+        default=False
+    )
+
+    taskSection = models.ForeignKey(
+        TaskSection,
         db_index=True,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+
+    taskFolder = models.ForeignKey(
+        TaskFolder,
+        db_index=True,
+        on_delete=models.CASCADE,
     )
 
     person = models.ForeignKey(
@@ -146,7 +159,7 @@ class Task(models.Model):
         null=True
     )
 
-    star = models.BooleanField(
+    is_star = models.BooleanField(
         verbose_name="star",
         default=False
     )
@@ -164,12 +177,13 @@ class Task(models.Model):
     def __str__(self):
         return self.name
 
-class TaskStep(models.Model):
+
+class SubTask(models.Model):
     class Meta:
-        db_table = 'task_step'
+        db_table = 'sub_task'
         ordering = ['-created_at']
-        verbose_name = 'task step'
-        verbose_name_plural = 'task steps'
+        verbose_name = 'sub task'
+        verbose_name_plural = 'sub tasks'
 
     id = models.UUIDField(
         verbose_name="id",

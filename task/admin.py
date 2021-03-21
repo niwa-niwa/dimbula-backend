@@ -1,12 +1,12 @@
 from django.contrib import admin
 from .models import (
     TaskFolder,
-    TaskStatus,
+    TaskSection,
     Task,
-    TaskStep
+    SubTask
 )
 
 admin.site.register(TaskFolder)
-admin.site.register(TaskStatus)
+admin.site.register(TaskSection)
 admin.site.register(Task)
-admin.site.register(TaskStep)
+admin.site.register(SubTask)
