@@ -39,8 +39,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'firebase_auth',
 
-    'person.apps.PersonConfig',
     'v1.apps.V1Config',
+    'person.apps.PersonConfig',
+    'task.apps.TaskConfig',
 ]
 
 MIDDLEWARE = [
