@@ -6,6 +6,7 @@ from task.models import(
 
 
 class TaskFolderSerializer(serializers.ModelSerializer):
+    # person_id = serializers.ReadOnlyField(source='person.id', read_only=True)
     class Meta:
         model = TaskFolder
         fields = [
@@ -13,6 +14,7 @@ class TaskFolderSerializer(serializers.ModelSerializer):
             'name',
             'person',
         ]
+        # extra_kwargs = {'person': {'read_only': True}}
 
 
 class TaskSectionSerializer(serializers.ModelSerializer):

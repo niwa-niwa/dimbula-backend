@@ -6,8 +6,6 @@ from task.models import *
 from v1.serializers._task_serializers import *
 
 ROOT_URL = 'http://127.0.0.1:8000/api/v1/'
-PERSON_URL = ROOT_URL + 'persons/'
-
 
 
 class TaskTest(APITestCase):
@@ -28,21 +26,18 @@ class TaskTest(APITestCase):
 
     def test_post_TaskFolder(self):
         new_taskfolder = {
-            'firebase_id':"ThisIsId",
-            'name':"TEST MAN",
-            'email':"ccc@ccc.com",
-            'provider_id':"facebook.com",
+            'name':"shopping",
+            'person':self.person.id
         }
+
         response = self.client.post(ROOT_URL + "taskfolders/create/", new_taskfolder)
-        
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        # task_folder = TaskFolder.objects.all().first()
-        # serializer = TaskFolderSerializer(task_folder)
+        task_folder = TaskFolder.objects.get(id=response.data["id"])
 
-        # self.assertTrue(response.data["id"])
-        # self.assertEqual(response.data["name"], new_taskfolder["name"])
-        # self.assertEqual(response.data["email"], new_taskfolder["email"])
+        self.assertEqual(task_folder.name, new_taskfolder["name"])
+        self.assertEqual(task_folder.person.id, new_taskfolder["person"])
 
 
     def test_get_TaskFolder(self):
