@@ -1,15 +1,15 @@
-from django.db import models
-from django.test import TestCase
-from rest_framework import response, serializers, status
+from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from person.models import Person
-from .serializers import PersonSerializer
+from v1.serializers import PersonSerializer
 
 PERSON_URL = 'http://127.0.0.1:8000/api/v1/persons/'
 
 # Create your tests here.
 class PersonTest(APITestCase):
 
+    print("Start Person Test !!")
+    
     def setUp(self):
         self.person = Person.objects.create(
             firebase_id="firebase_user_uid",
@@ -46,4 +46,3 @@ class PersonTest(APITestCase):
         self.assertTrue(response.data["id"])
         self.assertEqual(response.data["name"], new_user["name"])
         self.assertEqual(response.data["email"], new_user["email"])
-        self.assertEqual(response.data["provider_id"], new_user["provider_id"])

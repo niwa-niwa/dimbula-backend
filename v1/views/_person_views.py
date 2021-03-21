@@ -1,10 +1,9 @@
-from django.shortcuts import render
-from rest_framework import viewsets, generics
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 
 from person.models import Person
-from .serializers import PersonSerializer
+from v1.serializers import PersonSerializer
 
 
 # not need
@@ -12,7 +11,7 @@ from .serializers import PersonSerializer
 #     queryset = Person.objects.all()
 #     serializer_class = PersonSerializer
 
-class PersonView(generics.CreateAPIView):
+class PersonView(APIView):
     serializer_class = PersonSerializer
     permission_classes = [permissions.IsAuthenticated]
 

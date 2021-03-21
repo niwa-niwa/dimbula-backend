@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework import routers
 
-from . import views
+from .views import *
 
 
 router = routers.DefaultRouter()
@@ -11,6 +11,6 @@ app_name = 'v1'
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('persons/', views.PersonView.as_view(), name='person_list'),
-    path('persons/create/', views.PersonView.as_view(), name='person_create'),
+    path('persons/', PersonView.as_view(), name='person_list'),
+    path('persons/create/', PersonView.as_view(), name='person_create'),
 ]
