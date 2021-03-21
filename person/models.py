@@ -90,6 +90,5 @@ class Person(models.Model):
         auto_now=True
     )
 
-
     def __str__(self):
         return self.name
