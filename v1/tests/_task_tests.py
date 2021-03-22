@@ -1,5 +1,4 @@
-from uuid import uuid4
-from rest_framework import response, status
+from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
 from person.models import Person
@@ -42,6 +41,7 @@ class TaskTest(APITestCase):
 
 
     def test_post_TaskFolder(self):
+
         new_taskfolder = {
             'name':"shopping",
             'person':self.person.id
@@ -54,25 +54,53 @@ class TaskTest(APITestCase):
         task_folder = TaskFolder.objects.get(id=response.data["id"])
 
         self.assertEqual(task_folder.name, new_taskfolder["name"])
+
         self.assertEqual(task_folder.person.id, new_taskfolder["person"])
 
 
     def test_get_TaskFolder(self):
+
         create_taskFolder(self.person)
 
         responce = self.client.get(ROOT_URL + TASKFOLDER)
         
         task_folders = TaskFolder.objects.filter(person=self.person.id)
+
         serializer = TaskFolderSerializer(task_folders, many=True)
         
         self.assertEqual(responce.status_code, status.HTTP_200_OK)
+
         self.assertEqual(responce.data, serializer.data)
 
 
     def test_patch_TaskFolder(self):
-        response = self.client.patch(ROOT_URL+"taskfolders/edit/")
+
+        folder = create_taskFolder(self.person)
+        
+        payload = {
+            'name':"Edit_shopping",
+            'person':self.person.id
+        }
+
+        response = self.client.patch(ROOT_URL+ TASKFOLDER + "edit/" + str(folder.id) + "/", payload)
+
+        folder.refresh_from_db()
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+        self.assertEqual(folder.person, self.person)
+
+        self.assertEqual(folder.name, payload['name'])
+
+
     def test_delete_TaskFolder(self):
-        response = self.client.delete(ROOT_URL+"taskfolders/delete/")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        folder = create_taskFolder(self.person)
+
+        self.assertEqual(1, TaskFolder.objects.count())
+
+        response = self.client.delete(ROOT_URL + TASKFOLDER + "delete/" + str(folder.id) + "/")
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        self.assertEqual(0, TaskFolder.objects.count())
