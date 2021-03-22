@@ -1,3 +1,4 @@
+from uuid import uuid4
 from rest_framework import response, status
 from rest_framework.test import APITestCase, APIClient
 
@@ -6,11 +7,27 @@ from task.models import *
 from v1.serializers._task_serializers import *
 
 ROOT_URL = 'http://127.0.0.1:8000/api/v1/'
+TASKFOLDER = "taskfolders/"
+
+
+def create_person() -> Person:
+    return Person.objects.create(
+        firebase_id="1_firebase_user_uid",
+        name="aa_test_name",
+        email="testaa_email@adb.com",
+        email_verified=True,
+        provider_id="google.com"
+    )
+
+def create_taskFolder(person: Person) -> TaskFolder:
+    return TaskFolder.objects.create(
+        name="shopping",
+        person=person
+    )
 
 
 class TaskTest(APITestCase):
     print("Start Task Test !!")
-
 
     def setUp(self):
         self.person = Person.objects.create(
@@ -30,7 +47,7 @@ class TaskTest(APITestCase):
             'person':self.person.id
         }
 
-        response = self.client.post(ROOT_URL + "taskfolders/create/", new_taskfolder)
+        response = self.client.post(ROOT_URL + TASKFOLDER + "create/", new_taskfolder)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -41,11 +58,16 @@ class TaskTest(APITestCase):
 
 
     def test_get_TaskFolder(self):
-        responce = self.client.get(ROOT_URL+"taskfolders/")
-        # task_folders = TaskFolder.objects.all()
-        # serializer = TaskFolderSerializer(task_folders, many=True)
+        create_taskFolder(self.person)
+
+        responce = self.client.get(ROOT_URL + TASKFOLDER)
+        
+        task_folders = TaskFolder.objects.filter(person=self.person.id)
+        serializer = TaskFolderSerializer(task_folders, many=True)
+        
         self.assertEqual(responce.status_code, status.HTTP_200_OK)
-        # self.assertEqual(responce.data, serializer.data)
+        self.assertEqual(responce.data, serializer.data)
+
 
     def test_patch_TaskFolder(self):
         response = self.client.patch(ROOT_URL+"taskfolders/edit/")

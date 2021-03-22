@@ -23,8 +23,13 @@ class TaskFolderView(APIView):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+
     def get(self, request):
-        return Response(status=status.HTTP_200_OK)
+        task_folders = TaskFolder.objects.filter(person=request.user.id)
+        serializer = TaskFolderSerializer(task_folders, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
     def patch(self, request):
         return Response(status=status.HTTP_200_OK)
