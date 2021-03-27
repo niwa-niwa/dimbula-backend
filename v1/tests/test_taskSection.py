@@ -5,8 +5,10 @@ from person.models import Person
 from task.models import TaskSection
 from v1.serializers._task_serializers import *
 
-ENDPOINT = '/api/v1/task-sections/'
+from ._fake_data import *
+from .test_taskFolder import create_taskFolder
 
+ENDPOINT = '/api/v1/task-sections/'
 
 
 class TestTaskSection(APITestCase):
@@ -14,27 +16,43 @@ class TestTaskSection(APITestCase):
 
 
     def setUp(self):
-        self.person = Person.objects.create(
-            firebase_id="firebase_user_uid",
-            name="test_name",
-            email="test_email@adb.com",
-            email_verified=True,
-            provider_id="google.com"
-            )
+        create_taskData()
+        self.person = create_admin()
         self.client = APIClient()
         self.client.force_authenticate(user=self.person)
 
 
-    def test_create_testTaskSection_with_POST(self):
-        response = self.client.post(ENDPOINT+'create/')
+    def test_create_taskSection_with_POST(self):
+        task_folder = create_taskFolder(self.person)
+        new_section = {
+            'name':'new_section',
+            'taskFolder':task_folder.id,
+            "person":self.person.id,
+        }
+        self.assertEqual(TaskSection.objects.filter(person=self.person.id).count(), 0)
 
+        response = self.client.post(ENDPOINT+'create/',  new_section)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(TaskSection.objects.filter(person=self.person.id).count(), 1)
+
+        task_section = TaskSection.objects.get(id=response.data["id"])
+        self.assertEqual(new_section["name"], task_section.name)
+        self.assertEqual(new_section["taskFolder"], task_section.taskFolder.id)
+        self.assertEqual(new_section["person"], task_section.person.id)
 
 
     def test_get_testTaskSection_with_GET(self):
-        response = self.client.get(ENDPOINT)
+        self.assertEqual(TaskSection.objects.filter(person=self.person.id).count(), 0)
 
+        my_task_folder = create_taskFolder(self.person)
+        my_task_section = create_taskSection(self.person, my_task_folder)
+        self.assertEqual(TaskSection.objects.filter(person=self.person.id).count(), 1)
+
+        response = self.client.get(ENDPOINT)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        task_sections = TaskSection.objects.filter(person=self.person.id)
+        serializer = TaskSectionSerializer(task_sections, many=True)
+        self.assertEqual(serializer.data, response.data)
 
 
     def test_edit_testTaskSection_with_PATCH(self):

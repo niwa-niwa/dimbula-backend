@@ -65,16 +65,21 @@ class TaskFolderView(APIView):
 
 
 class TaskSectionView(APIView):
-    serializers = TaskSectionSerializer
+    serializer_class = TaskSectionSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 
     def post(self, request):
-        return Response(status=status.HTTP_201_CREATED)
+        serializer = TaskSectionSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     
     def get(self, request):
-        return Response(status=status.HTTP_200_OK)
+        task_sections = TaskSection.objects.filter(person=request.user.id)
+        serializer = TaskSectionSerializer(task_sections, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     
     def patch(self, request, pk):
