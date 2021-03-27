@@ -28,51 +28,60 @@ def create_admin() -> Person:
     )
 
 
-def create_person(data=False) -> Person:
+def create_person(
+        firebase_id="custom_firebase_user_uid",
+        name="test_name_custom",
+        email="test_email_custom@adb.com",
+        email_verified=True,
+        provider_id="google.com",
+        is_admin=False,
+    ) -> Person:
     """
     create a person
 
     argument:
-        data : dict
-            "firebase_id":"custom_firebase_user_uid",
-            "name":"test_name_custom",
-            "email":"test_email_custom@adb.com",
-            "email_verified":True,
-            "provider_id":"google.com",
-            "is_admin":False,
+        firebase_id : String
+        name : String
+        email : String and mail address
+        email_verified : Boolean
+        provider_id : String
+        is_admin : Boolean
+
+        Default : 
+            firebase_id="custom_firebase_user_uid",
+            name="test_name_custom",
+            email="test_email_custom@adb.com",
+            email_verified=True,
+            provider_id="google.com",
+            is_admin=False,
     return
         type of Person
     """
 
-    person = {
-        "firebase_id":"custom_firebase_user_uid",
-        "name":"test_name_custom",
-        "email":"test_email_custom@adb.com",
-        "email_verified":True,
-        "provider_id":"google.com",
-        "is_admin":False,
-    }
-    if data:
-        person = data
-
-    return Person.objects.create(person)
+    return Person.objects.create(
+        firebase_id,
+        name,
+        email,
+        email_verified,
+        provider_id,
+        is_admin
+    )
 
 
-def create_taskFolder(person: Person, data=False) -> TaskFolder:
+def create_taskFolder(person: Person, name = "shopping"
+) -> TaskFolder:
     """
     create a TaskFolder
 
     Argument:
         person : Person
-        data : String
+        name : String
             name of task folder
+            default = shopping
 
     return :
         type of TaskFolder
     """
-    name = "shopping"
-    if data:
-        name = data
 
     return TaskFolder.objects.create(
         name=name,
@@ -80,23 +89,21 @@ def create_taskFolder(person: Person, data=False) -> TaskFolder:
     )
 
 
-def create_taskSection(person: Person, taskFolder: TaskFolder, data=False ) -> TaskSection:
+def create_taskSection(person: Person, taskFolder: TaskFolder, name="Happy box" ) -> TaskSection:
     """
     create a task section
 
     Arguments
         person : Person,
         taskFolder : TaskFolder,
-        data : String
+        name : String
             name of task section
+            defalt = "Happy box"
 
     Return
         type of TaskSection
     """
-    name = "Happy box"
-    if data :
-        name = data
-
+    
     return TaskSection.objects.create(
         name=name,
         taskFolder=taskFolder,
@@ -104,7 +111,7 @@ def create_taskSection(person: Person, taskFolder: TaskFolder, data=False ) -> T
     )
 
 
-def create_task(person: Person, taskFolder: TaskFolder, taskSection: TaskSection, data=False,) -> Task:
+def create_task(person: Person, taskFolder: TaskFolder, taskSection: TaskSection, name = "do my landry",) -> Task:
     """
     crete a task
 
@@ -112,15 +119,13 @@ def create_task(person: Person, taskFolder: TaskFolder, taskSection: TaskSection
         person : Person,
         taskFolder : TaskFolder,
         taskSection : TaskSection,
-        data : String
+        name : String
             name of task
+            default = do my landry
 
     Return 
         type of Task
     """
-    name = "do my landry"
-    if data :
-        name = data
 
     return Task.objects.create(
         name=name,
@@ -130,22 +135,20 @@ def create_task(person: Person, taskFolder: TaskFolder, taskSection: TaskSection
     )
 
 
-def create_subtask(person: Person, task: Task, data=False) -> SubTask:
+def create_subtask(person: Person, task: Task, name = "step 1") -> SubTask:
     """
     create a subtask
 
     Argument:
         person : Person,
         task : Task,
-        data : String
+        name : String
             name of subtask
+            default = step 1
 
     Return:
         type of SubTask
     """
-    name = "step 1"
-    if data :
-        name = data
 
     return SubTask.objects.create(
         name=name,

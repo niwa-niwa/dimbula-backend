@@ -1,12 +1,10 @@
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
-from person.models import Person
 from task.models import TaskSection
 from v1.serializers._task_serializers import *
 
 from ._fake_data import *
-from .test_taskFolder import create_taskFolder
 
 ENDPOINT = '/api/v1/task-sections/'
 
@@ -56,12 +54,28 @@ class TestTaskSection(APITestCase):
 
 
     def test_edit_testTaskSection_with_PATCH(self):
-        response = self.client.patch(ENDPOINT+'edit/'+'3/')
+        self.assertEqual(TaskSection.objects.filter(person=self.person).count(), 0)
 
+        task_folder = create_taskFolder(self.person)
+        task_section = create_taskSection(self.person, task_folder)
+        self.assertEqual(TaskSection.objects.filter(person=self.person).count(), 1)
+
+        edit_data = {"name":"pop-edit"}
+        response = self.client.patch(ENDPOINT+'edit/' + str(task_section.id) + '/',edit_data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        new_section = TaskSection.objects.get(id=task_section.id)
+        self.assertEqual(edit_data["name"], new_section.name)
 
 
     def test_delete_testTaskSection_with_DELETE(self):
-        response = self.client.delete(ENDPOINT+'delete/'+'3/')
+        self.assertEqual(TaskSection.objects.filter(person=self.person).count(), 0)
 
+        task_folder = create_taskFolder(self.person)
+        task_section = create_taskSection(self.person, task_folder)
+        self.assertEqual(TaskSection.objects.filter(person=self.person).count(), 1)
+
+        response = self.client.delete(ENDPOINT+'delete/'+ str(task_section.id) + '/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(TaskSection.objects.filter(person=self.person).count(), 0)
+

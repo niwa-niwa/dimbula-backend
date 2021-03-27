@@ -3,7 +3,6 @@ from rest_framework.views import APIView
 from rest_framework import status, permissions
 from rest_framework.response import Response
 
-from task.models import Task
 from v1.serializers._task_serializers import *
 
 
@@ -83,8 +82,14 @@ class TaskSectionView(APIView):
 
     
     def patch(self, request, pk):
-        return Response(status=status.HTTP_200_OK)
+        task_section = get_object_or_404(TaskSection, pk=pk)
+        serializer = TaskSectionSerializer(instance=task_section, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
     def delete(self, request, pk):
+        task_section = get_object_or_404(TaskSection, pk=pk)
+        task_section.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
