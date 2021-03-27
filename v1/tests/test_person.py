@@ -13,12 +13,12 @@ class TestPerson(APITestCase):
     print("Start Person Test !!")
     
     def setUp(self):
+        create_taskData()
         self.person = create_admin()
         self.client = APIClient()
         self.client.force_authenticate(user=self.person)
 
     def test_getUser(self):
-        excute_persons()
         responce = self.client.get(PERSON_URL)
         person = Person.objects.all()
         serializer = PersonSerializer(person, many=True)
