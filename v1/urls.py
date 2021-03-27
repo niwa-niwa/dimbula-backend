@@ -23,5 +23,9 @@ urlpatterns = [
     path('task-sections/edit/<pk>/', TaskSectionView.as_view(), name='task-folder_edit'),
     path('task-sections/delete/<pk>/', TaskSectionView.as_view(), name='task-folder_delete'),
 
+    path('tasks/', TaskView.as_view(), name="task_list"),
+    path('tasks/create/', TaskView.as_view(), name="task_create"),
+    path('tasks/edit/<pk>/', TaskView.as_view(), name="task_edit"),
+    path('tasks/delete/<pk>/', TaskView.as_view(), name="task_delete"),
 
 ]

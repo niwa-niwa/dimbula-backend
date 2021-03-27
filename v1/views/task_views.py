@@ -93,3 +93,26 @@ class TaskSectionView(APIView):
         task_section = get_object_or_404(TaskSection, pk=pk)
         task_section.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class TaskView(APIView):
+    serializer_class = TaskSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        serializer = TaskSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    
+    def get(self, request):
+        return Response(status=status.HTTP_200_OK)
+
+    
+    def patch(self, request, pk):
+        return Response(status=status.HTTP_200_OK)
+
+    
+    def delete(self, request, pk):
+        return Response(status=status.HTTP_204_NO_CONTENT)
