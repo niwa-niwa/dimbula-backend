@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
 from task.models import TaskSection
-from v1.serializers._task_serializers import *
+from v1.serializers.task_serializers import *
 
 from .fake_data import *
 

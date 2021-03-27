@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework import status, permissions
 from rest_framework.response import Response
 
-from v1.serializers._task_serializers import *
+from v1.serializers.task_serializers import *
 
 
 class TaskFolderView(APIView):

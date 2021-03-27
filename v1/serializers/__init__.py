@@ -1,2 +1,2 @@
-from ._person_serializers import *
-from ._task_serializers import *
+from .person_serializers import *
+from .task_serializers import *
