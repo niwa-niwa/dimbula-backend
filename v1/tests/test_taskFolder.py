@@ -9,15 +9,6 @@ ROOT_URL = '/api/v1/'
 TASKFOLDER = "task-folders/"
 
 
-def create_person() -> Person:
-    return Person.objects.create(
-        firebase_id="1_firebase_user_uid",
-        name="aa_test_name",
-        email="testaa_email@adb.com",
-        email_verified=True,
-        provider_id="google.com"
-    )
-
 def create_taskFolder(person: Person) -> TaskFolder:
     return TaskFolder.objects.create(
         name="shopping",
