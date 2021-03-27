@@ -7,7 +7,7 @@ class Person(models.Model):
 
     class Meta:
         db_table = 'person'
-        ordering = ('created_at',)
+        ordering = ['-created_at']
         verbose_name = 'person'
         verbose_name_plural = 'persons'
 
@@ -89,7 +89,6 @@ class Person(models.Model):
         verbose_name="updated at",
         auto_now=True
     )
-
 
     def __str__(self):
         return self.name
