@@ -62,3 +62,24 @@ class TaskFolderView(APIView):
         task_folder.delete()
         
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class TaskSectionView(APIView):
+    serializers = TaskSectionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+    def post(self, request):
+        return Response(status=status.HTTP_201_CREATED)
+
+    
+    def get(self, request):
+        return Response(status=status.HTTP_200_OK)
+
+    
+    def patch(self, request, pk):
+        return Response(status=status.HTTP_200_OK)
+
+
+    def delete(self, request, pk):
+        return Response(status=status.HTTP_204_NO_CONTENT)
