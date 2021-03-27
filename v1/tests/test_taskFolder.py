@@ -5,6 +5,8 @@ from person.models import Person
 from task.models import TaskFolder
 from v1.serializers._task_serializers import *
 
+from .test_person import create_admin
+
 ROOT_URL = '/api/v1/'
 TASKFOLDER = "task-folders/"
 
@@ -15,18 +17,26 @@ def create_taskFolder(person: Person) -> TaskFolder:
         person=person
     )
 
+def create_taskFolders(persons: list) -> list:
+    folder_a = TaskFolder.objects.create(
+        name="ToDo",
+        person=persons[1],
+    )
+    folder_b = TaskFolder.objects.create(
+        name="ToDo Later",
+        person=persons[2],
+    )
+    folder_c = TaskFolder.objects.create(
+        name="Future",
+        person=persons[1],
+    )
+
 
 class TestTaskFolder(APITestCase):
     print("Start Task Test !!")
 
     def setUp(self):
-        self.person = Person.objects.create(
-            firebase_id="firebase_user_uid",
-            name="test_name",
-            email="test_email@adb.com",
-            email_verified=True,
-            provider_id="google.com"
-            )
+        self.person = create_admin()
         self.client = APIClient()
         self.client.force_authenticate(user=self.person)
 
