@@ -3,10 +3,11 @@ from rest_framework.test import APITestCase, APIClient
 from person.models import Person
 from v1.serializers import PersonSerializer
 
-PERSON_URL = 'http://127.0.0.1:8000/api/v1/persons/'
+PERSON_URL = '/api/v1/persons/'
+
 
 # Create your tests here.
-class PersonTest(APITestCase):
+class TestPerson(APITestCase):
 
     print("Start Person Test !!")
     

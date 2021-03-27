@@ -2,11 +2,11 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
 from person.models import Person
-from task.models import *
+from task.models import TaskFolder
 from v1.serializers._task_serializers import *
 
-ROOT_URL = 'http://127.0.0.1:8000/api/v1/'
-TASKFOLDER = "taskfolders/"
+ROOT_URL = '/api/v1/'
+TASKFOLDER = "task-folders/"
 
 
 def create_person() -> Person:
@@ -25,7 +25,7 @@ def create_taskFolder(person: Person) -> TaskFolder:
     )
 
 
-class TaskTest(APITestCase):
+class TestTaskFolder(APITestCase):
     print("Start Task Test !!")
 
     def setUp(self):

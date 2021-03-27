@@ -5,7 +5,6 @@ from .views import *
 
 
 router = routers.DefaultRouter()
-# router.register('users', views.UserViewSet) # not need
 
 app_name = 'v1'
 
@@ -14,9 +13,9 @@ urlpatterns = [
     path('persons/', PersonView.as_view(), name='person_list'),
     path('persons/create/', PersonView.as_view(), name='person_create'),
 
-    path('taskfolders/', TaskFolderView.as_view(), name='taskfolder_list'),
-    path('taskfolders/create/', TaskFolderView.as_view(), name='taskfolder_create'),
-    path('taskfolders/edit/<pk>/', TaskFolderView.as_view(), name='taskfolder_edit'),
-    path('taskfolders/delete/<pk>/', TaskFolderView.as_view(), name='taskfolder_delete'),
+    path('task-folders/', TaskFolderView.as_view(), name='task-folder_list'),
+    path('task-folders/create/', TaskFolderView.as_view(), name='task-folder_create'),
+    path('task-folders/edit/<pk>/', TaskFolderView.as_view(), name='task-folder_edit'),
+    path('task-folders/delete/<pk>/', TaskFolderView.as_view(), name='task-folder_delete'),
 
 ]
