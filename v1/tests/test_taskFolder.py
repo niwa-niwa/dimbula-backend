@@ -4,7 +4,7 @@ from rest_framework.test import APITestCase, APIClient
 from task.models import TaskFolder
 from v1.serializers._task_serializers import *
 
-from ._fake_data import *
+from .fake_data import *
 
 ROOT_URL = '/api/v1/'
 TASKFOLDER = "task-folders/"

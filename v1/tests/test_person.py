@@ -3,7 +3,7 @@ from rest_framework.test import APITestCase, APIClient
 from person.models import Person
 from v1.serializers import PersonSerializer
 
-from ._fake_data import *
+from .fake_data import *
 
 PERSON_URL = '/api/v1/persons/'
 
