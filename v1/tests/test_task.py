@@ -12,8 +12,14 @@ class TestTask(APITestCase):
     print('Start Task TEST !!')
 
 
-    def __count(self, person):
-        return Task.objects.filter(person=person.id).count()
+    def __count(self)->int:
+        return Task.objects.filter(person=self.person.id).count()
+
+
+    def __create_task(self)->Task:
+        task_folder = create_taskFolder(self.person)
+        task_section = create_taskSection(self.person, task_folder)
+        return create_task(self.person, task_folder, task_section)
 
 
     def setUp(self):
@@ -24,7 +30,7 @@ class TestTask(APITestCase):
 
 
     def test_create_task_with_POST(self):
-        self.assertEqual(self.__count(self.person), 0)
+        self.assertEqual(self.__count(), 0)
 
         task_folder = create_taskFolder(self.person)
         task_section = create_taskSection(self.person, task_folder)
@@ -37,19 +43,17 @@ class TestTask(APITestCase):
 
         response = self.client.post(ENDPOINT + 'create/', data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(self.__count(self.person), 1)
+        self.assertEqual(self.__count(), 1)
         
         new_task = Task.objects.get(id=response.data["id"])
         self.assertEqual(data["name"], new_task.name)
 
 
     def test_get_task_with_GET(self):
-        self.assertEqual(self.__count(self.person), 0)
+        self.assertEqual(self.__count(), 0)
 
-        task_folder = create_taskFolder(self.person)
-        task_section = create_taskSection(self.person, task_folder)
-        task = create_task(self.person, task_folder, task_section)
-        self.assertEqual(self.__count(self.person), 1);
+        task = self.__create_task()
+        self.assertEqual(self.__count(), 1);
 
         response = self.client.get(ENDPOINT)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -60,12 +64,10 @@ class TestTask(APITestCase):
 
 
     def test_edit_task_with_PATCH(self):
-        self.assertEqual(self.__count(self.person), 0)
+        self.assertEqual(self.__count(), 0)
 
-        task_folder = create_taskFolder(self.person)
-        task_section = create_taskSection(self.person, task_folder)
-        task = create_task(self.person, task_folder, task_section)
-        self.assertEqual(self.__count(self.person), 1)
+        task = self.__create_task()
+        self.assertEqual(self.__count(), 1)
 
         data = {"name":'edited name'}
         response = self.client.patch(ENDPOINT + 'edit/' + str(task.id) + '/', data)
@@ -76,11 +78,9 @@ class TestTask(APITestCase):
 
 
     def test_delete_task_with_DELETE(self):
-        task_folder = create_taskFolder(self.person)
-        task_section = create_taskSection(self.person, task_folder)
-        task = create_task(self.person, task_folder, task_section)
-        self.assertEqual(self.__count(self.person), 1)
+        task = self.__create_task()
+        self.assertEqual(self.__count(), 1)
 
         response = self.client.delete(ENDPOINT + 'delete/' + str(task.id) + "/")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(self.__count(self.person), 0)
+        self.assertEqual(self.__count(), 0)
