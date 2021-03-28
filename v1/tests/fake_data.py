@@ -142,18 +142,18 @@ def create_task(
     )
 
 
-def create_subtask(
+def create_subTask(
     person: Person,
     task: Task,
     name = "step 1") -> SubTask:
     """
-    create a subtask
+    create a subTask
 
     Argument:
         person : Person,
         task : Task,
         name : String
-            name of subtask
+            name of subTask
             default = step 1
 
     Return:
@@ -204,7 +204,7 @@ class TaskFactory(object):
         taskFolders = cls._create_taskFolders(persons)
         taskSections = cls._create_taskSections(persons, taskFolders)
         tasks = cls._create_tasks(persons, taskFolders, taskSections)
-        subtasks = cls._create_subTasks(persons, tasks)
+        subTasks = cls._create_subTasks(persons, tasks)
 
 
     def _create_persons():
@@ -343,29 +343,29 @@ class TaskFactory(object):
 
     def _create_subTasks(persons, tasks):
 
-        subtask_a = SubTask.objects.create(
-            name='subtask_a',
+        sub_task_a = SubTask.objects.create(
+            name='sub_task_a',
             task=tasks[0],
             person=persons[0]
         )
-        subtask_b = SubTask.objects.create(
-            name='subtask_a',
+        sub_task_b = SubTask.objects.create(
+            name='sub_task_a',
             task=tasks[1],
             person=persons[1]
         )
-        subtask_c = SubTask.objects.create(
-            name='subtask_a',
+        sub_task_c = SubTask.objects.create(
+            name='sub_task_a',
             task=tasks[2],
             person=persons[2]
         )
-        subtask_d = SubTask.objects.create(
-            name='subtask_a',
+        sub_task_d = SubTask.objects.create(
+            name='sub_task_a',
             task=tasks[3],
             person=persons[3]
         )
-        subtask_e = SubTask.objects.create(
-            name='subtask_a',
+        sub_task_e = SubTask.objects.create(
+            name='sub_task_a',
             task=tasks[4],
             person=persons[4]
         )
-        return [subtask_a, subtask_b, subtask_c, subtask_d, subtask_e, ]
+        return [sub_task_a, sub_task_b, sub_task_c, sub_task_d, sub_task_e, ]
