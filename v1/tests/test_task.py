@@ -45,15 +45,43 @@ class TestTask(APITestCase):
 
 
     def test_get_task_with_GET(self):
+        self.assertEqual(self.__count(self.person), 0)
+
+        task_folder = create_taskFolder(self.person)
+        task_section = create_taskSection(self.person, task_folder)
+        task = create_task(self.person, task_folder, task_section)
+        self.assertEqual(self.__count(self.person), 1);
+
         response = self.client.get(ENDPOINT)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+        tasks = Task.objects.filter(person=self.person.id)
+        serializer = TaskSerializer(instance=tasks, many=True)
+        self.assertEqual(response.data, serializer.data)
+
 
     def test_edit_task_with_PATCH(self):
-        response = self.client.patch(ENDPOINT + 'edit/' + "1/")
+        self.assertEqual(self.__count(self.person), 0)
+
+        task_folder = create_taskFolder(self.person)
+        task_section = create_taskSection(self.person, task_folder)
+        task = create_task(self.person, task_folder, task_section)
+        self.assertEqual(self.__count(self.person), 1)
+
+        data = {"name":'edited name'}
+        response = self.client.patch(ENDPOINT + 'edit/' + str(task.id) + '/', data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        edit_task = Task.objects.get(pk=task.id)
+        self.assertEqual(edit_task.name, data["name"])
 
 
     def test_delete_task_with_DELETE(self):
-        response = self.client.delete(ENDPOINT + 'delete/' + "1/")
+        task_folder = create_taskFolder(self.person)
+        task_section = create_taskSection(self.person, task_folder)
+        task = create_task(self.person, task_folder, task_section)
+        self.assertEqual(self.__count(self.person), 1)
+
+        response = self.client.delete(ENDPOINT + 'delete/' + str(task.id) + "/")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(self.__count(self.person), 0)

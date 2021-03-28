@@ -107,12 +107,20 @@ class TaskView(APIView):
 
     
     def get(self, request):
-        return Response(status=status.HTTP_200_OK)
+        tasks = Task.objects.filter(person=request.user.id)
+        serializer = TaskSerializer(instance=tasks, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     
     def patch(self, request, pk):
-        return Response(status=status.HTTP_200_OK)
+        task = get_object_or_404(Task, pk=pk, person=request.user.id)
+        serializer = TaskSerializer(instance=task, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     
     def delete(self, request, pk):
+        task = get_object_or_404(Task, pk=pk, person=request.user.id)
+        task.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
