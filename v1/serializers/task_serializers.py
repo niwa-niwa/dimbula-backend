@@ -46,7 +46,7 @@ class TaskSerializer(serializers.ModelSerializer):
         ]
 
 
-class SubTackSerializer(serializers.ModelSerializer):
+class SubTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubTask
         fields = [
