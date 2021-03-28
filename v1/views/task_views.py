@@ -40,7 +40,7 @@ class TaskFolderView(APIView):
 
     def patch(self, request, pk):
 
-        task_folder = get_object_or_404(TaskFolder, pk=pk)
+        task_folder = get_object_or_404(TaskFolder, pk=pk, person=request.user.id)
 
         serializer = TaskFolderSerializer(instance=task_folder, data=request.data)
 
@@ -56,7 +56,7 @@ class TaskFolderView(APIView):
 
     def delete(self, request, pk):
 
-        task_folder = get_object_or_404(TaskFolder, pk=pk)
+        task_folder = get_object_or_404(TaskFolder, pk=pk, person=request.user.id)
 
         task_folder.delete()
         
@@ -82,7 +82,7 @@ class TaskSectionView(APIView):
 
     
     def patch(self, request, pk):
-        task_section = get_object_or_404(TaskSection, pk=pk)
+        task_section = get_object_or_404(TaskSection, pk=pk, person=request.user.id)
         serializer = TaskSectionSerializer(instance=task_section, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -90,7 +90,7 @@ class TaskSectionView(APIView):
 
 
     def delete(self, request, pk):
-        task_section = get_object_or_404(TaskSection, pk=pk)
+        task_section = get_object_or_404(TaskSection, pk=pk, person=request.user.id)
         task_section.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
