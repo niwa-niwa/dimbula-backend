@@ -7,10 +7,7 @@ from v1.serializers.task_serializers import *
 
 
 class TaskFolderView(APIView):
-
-    serializer_class = TaskFolderSerializer
     permission_classes = [permissions.IsAuthenticated]
-
 
     def post(self, request):
 
@@ -64,9 +61,7 @@ class TaskFolderView(APIView):
 
 
 class TaskSectionView(APIView):
-    serializer_class = TaskSectionSerializer
     permission_classes = [permissions.IsAuthenticated]
-
 
     def post(self, request):
         serializer = TaskSectionSerializer(data=request.data)
@@ -96,7 +91,6 @@ class TaskSectionView(APIView):
 
 
 class TaskView(APIView):
-    serializer_class = TaskSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
@@ -143,4 +137,3 @@ class SubTaskView(APIView):
 
     def delete(self, request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
-        
