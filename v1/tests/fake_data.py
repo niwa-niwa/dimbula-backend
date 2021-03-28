@@ -16,7 +16,7 @@ def create_admin() -> Person:
             email="test_email_admin@adb.com",
             email_verified=True,
             provider_id="google.com",
-            is_admin=True,
+            is_staff=True,
     """
     return Person.objects.create(
             firebase_id="admin_firebase_user_uid",
@@ -24,7 +24,7 @@ def create_admin() -> Person:
             email="test_email_admin@adb.com",
             email_verified=True,
             provider_id="google.com",
-            is_admin=True,
+            is_staff=True,
     )
 
 
@@ -34,7 +34,7 @@ def create_person(
         email="test_email_custom@adb.com",
         email_verified=True,
         provider_id="google.com",
-        is_admin=False ) -> Person:
+        is_staff=False ) -> Person:
     """
     create a person
 
@@ -44,7 +44,7 @@ def create_person(
         email : String and mail address
         email_verified : Boolean
         provider_id : String
-        is_admin : Boolean
+        is_staff : Boolean
 
         Default : 
             firebase_id="custom_firebase_user_uid",
@@ -52,18 +52,18 @@ def create_person(
             email="test_email_custom@adb.com",
             email_verified=True,
             provider_id="google.com",
-            is_admin=False,
+            is_staff=False,
     return
         type of Person
     """
 
     return Person.objects.create(
-        firebase_id,
-        name,
-        email,
-        email_verified,
-        provider_id,
-        is_admin
+        firebase_id=firebase_id,
+        name=name,
+        email=email,
+        email_verified=email_verified,
+        provider_id=provider_id,
+        is_staff=is_staff
     )
 
 
@@ -214,7 +214,7 @@ class TaskFactory(object):
             email="test_email_person_a@adb.com",
             email_verified=True,
             provider_id="google.com",
-            is_admin=True,
+            is_staff=True,
         )
         person_b = Person.objects.create(
             firebase_id="person_b_firebase_uid",
@@ -222,7 +222,7 @@ class TaskFactory(object):
             email="test_email_person_b@adb.com",
             email_verified=True,
             provider_id="google.com",
-            is_admin=False,
+            is_staff=False,
         )
         person_c = Person.objects.create(
             firebase_id="person_c_firebase_uid",
@@ -230,7 +230,7 @@ class TaskFactory(object):
             email="test_email_person_c@adb.com",
             email_verified=False,
             provider_id="google.com",
-            is_admin=False,
+            is_staff=False,
         )
         person_d = Person.objects.create(
             firebase_id="person_d_firebase_uid",
@@ -238,7 +238,7 @@ class TaskFactory(object):
             email="test_email_person_d@adb.com",
             email_verified=False,
             provider_id="google.com",
-            is_admin=False,
+            is_staff=False,
         )
         person_e = Person.objects.create(
             firebase_id="person_e_firebase_uid",
@@ -246,7 +246,7 @@ class TaskFactory(object):
             email="test_email_person_e@adb.com",
             email_verified=False,
             provider_id="google.com",
-            is_admin=False,
+            is_staff=False,
         )
         return [person_a, person_b, person_c, person_d, person_e]
 
