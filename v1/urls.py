@@ -28,4 +28,9 @@ urlpatterns = [
     path('tasks/edit/<pk>/', TaskView.as_view(), name="task_edit"),
     path('tasks/delete/<pk>/', TaskView.as_view(), name="task_delete"),
 
+    path('sub-tasks/', SubTaskView.as_view(), name="sub-task_list"),
+    path('sub-tasks/create/', SubTaskView.as_view(), name="sub-task_create"),
+    path('sub-tasks/edit/<pk>/', SubTaskView.as_view(), name="sub-task_edit"),
+    path('sub-tasks/delete/<pk>/', SubTaskView.as_view(), name="sub-task_delete"),
+
 ]

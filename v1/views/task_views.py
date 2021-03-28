@@ -124,3 +124,23 @@ class TaskView(APIView):
         task = get_object_or_404(Task, pk=pk, person=request.user.id)
         task.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class SubTaskView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        return Response(status=status.HTTP_201_CREATED)
+
+
+    def get(self, request):
+        return Response(status=status.HTTP_200_OK)
+
+
+    def patch(self, request, pk):
+        return Response(status=status.HTTP_200_OK)
+
+
+    def delete(self, request, pk):
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        

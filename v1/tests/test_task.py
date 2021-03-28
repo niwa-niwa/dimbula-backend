@@ -1,5 +1,4 @@
 from rest_framework import status
-from rest_framework.serializers import Serializer
 from rest_framework.test import APITestCase, APIClient
 
 from task.models import Task
