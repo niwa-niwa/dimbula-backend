@@ -23,81 +23,6 @@ class _PersonInfo():
         return person
 
 
-class TaskSectionSerializer(serializers.ModelSerializer, _PersonInfo):
-    person_info = SerializerMethodField()
-    class Meta:
-        model = TaskSection
-        fields = [
-            'id',
-            'name',
-            'default',
-            'taskFolder',
-            'person',
-            'person_info'
-        ]
-        extra_kwargs = {
-            'person': {'write_only':True},
-        }
-
-
-class TaskSectionDetailSerializer(serializers.ModelSerializer, _PersonInfo):
-    tasks = SerializerMethodField()
-    class Meta:
-        model = TaskSection
-        fields = [
-            'id',
-            'name',
-            'default',
-            'taskFolder',
-            'person',
-            'person_info'
-            'tasks',
-        ]
-        extra_kwargs = {
-            'person': {'write_only':True},
-        }
-
-    def get_tasks(self, obj):
-        tasks = TaskSerializer(
-            Task.objects
-                .filter(taskSection=obj.id)
-            , many=True
-            ).data
-        return tasks
-
-
-class TaskSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Task
-        fields = [
-            'id',
-            'name',
-            'memo',
-            'is_done',
-            'taskSection',
-            'taskFolder',
-            'person',
-            'start_date',
-            'due_date',
-            'is_star'
-        ]
-
-
-
-
-
-class SubTaskSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SubTask
-        fields = [
-            'id',
-            'name',
-            'is_done',
-            'task',
-            'person'
-        ]
-
-
 class TaskFolderSerializer(serializers.ModelSerializer, _PersonInfo):
     person_info = SerializerMethodField()
     task_count = SerializerMethodField()
@@ -125,6 +50,7 @@ class TaskFolderSerializer(serializers.ModelSerializer, _PersonInfo):
 class TaskFolderDetailSerializer(serializers.ModelSerializer, _PersonInfo):
     person_info = SerializerMethodField()
     tasks = SerializerMethodField()
+    taskSections = SerializerMethodField()
 
     class Meta:
         model = TaskFolder
@@ -136,6 +62,7 @@ class TaskFolderDetailSerializer(serializers.ModelSerializer, _PersonInfo):
             'created_at',
             'updated_at',
             'tasks',
+            'taskSections',
         ]
         extra_kwargs = {
             'person': {'write_only':True},
@@ -148,10 +75,81 @@ class TaskFolderDetailSerializer(serializers.ModelSerializer, _PersonInfo):
         ).data
         return tasks
 
-    def get_task_sections(self, obj):
-        task_sections = TaskSectionSerializer(
+    def get_taskSections(self, obj):
+        taskSections = TaskSectionSerializer(
             TaskSection.objects
                 .filter(taskFolder=obj.id)
             , many=True
         ).data
-        return task_sections
+        return taskSections
+
+
+class TaskSectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaskSection
+        fields = [
+            'id',
+            'name',
+            'default',
+            'taskFolder',
+            'person',
+        ]
+
+
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = [
+            'id',
+            'name',
+            'memo',
+            'is_done',
+            'taskSection',
+            'taskFolder',
+            'person',
+            'start_date',
+            'due_date',
+            'is_star'
+        ]
+
+
+class TaskDetailSerializer(serializers.ModelSerializer):
+    person = PersonSerializer()
+    taskSection = TaskSectionSerializer()
+    taskFolder = TaskFolderSerializer()
+    subTasks = SerializerMethodField()
+
+    class Meta:
+        model = Task
+        fields = [
+            'id',
+            'name',
+            'memo',
+            'is_done',
+            'taskSection',
+            'taskFolder',
+            'subTasks',
+            'person',
+            'start_date',
+            'due_date',
+            'is_star'
+        ]
+
+    def get_subTasks(self, obj):
+        sub_tasks = SubTaskSerializer(
+            SubTask.objects.filter(task=obj.id)
+            , many=True
+        ).data
+        return sub_tasks
+
+
+class SubTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubTask
+        fields = [
+            'id',
+            'name',
+            'is_done',
+            'task',
+            'person'
+        ]

@@ -104,6 +104,15 @@ class TaskSectionView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class TaskDetailView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, pk):
+        task = get_object_or_404(Task, pk=pk)
+        serializer = TaskDetailSerializer(instance=task)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class TaskView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -113,7 +122,6 @@ class TaskView(APIView):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    
     def get(self, request):
         tasks = Task.objects.filter(person=request.user.id)
         serializer = TaskSerializer(instance=tasks, many=True)

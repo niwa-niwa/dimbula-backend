@@ -84,3 +84,14 @@ class TestTask(APITestCase):
         response = self.client.delete(ENDPOINT + 'delete/' + str(task.id) + "/")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(self.__count(), 0)
+
+
+    def test_get_task_detail(self):
+        self.assertEqual(self.__count(), 0)
+
+        task = self.__create_task()
+        self.assertEqual(self.__count(), 1);
+
+        response = self.client.get(ENDPOINT + str(task.id) + '/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["subTasks"], [] )
