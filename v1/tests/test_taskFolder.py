@@ -44,7 +44,7 @@ class TestTaskFolder(APITestCase):
         self.assertEqual(self.__count(), 1)
 
         responce = self.client.get(ROOT_URL + TASKFOLDER)
-        task_folders = TaskFolder.objects.filter(person=self.person.id)
+        task_folders = TaskFolder.objects.filter(person=self.person)
         serializer = TaskFolderSerializer(task_folders, many=True)
         self.assertEqual(responce.status_code, status.HTTP_200_OK)
         self.assertEqual(responce.data, serializer.data)
@@ -56,6 +56,7 @@ class TestTaskFolder(APITestCase):
         self.assertEqual(self.__count(), 2)
         response= self.client.get(ROOT_URL + TASKFOLDER + str(folder.id) + "/")
         self.assertEqual(response.data['id'], str(folder.id))
+        self.assertEqual(response.data['tasks'], [])
 
 
     def test_patch_TaskFolder(self):

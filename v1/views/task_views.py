@@ -13,7 +13,7 @@ class TaskFolderDetailView(APIView):
 
         task_folder = get_object_or_404(TaskFolder, pk=pk, person=request.user.id)
 
-        serializer = TaskFolderSerializer(instance=task_folder)
+        serializer = TaskFolderDetailSerializer(instance=task_folder)
 
         return Response(serializer.data, status.HTTP_200_OK)
 
@@ -39,8 +39,9 @@ class TaskFolderView(APIView):
 
 
     def get(self, request):
+        person = get_object_or_404(Person, pk=request.user.id)
 
-        task_folders = TaskFolder.objects.filter(person=request.user.id)
+        task_folders = TaskFolder.objects.filter(person=person)
 
         serializer = TaskFolderSerializer(task_folders, many=True)
 
@@ -48,8 +49,9 @@ class TaskFolderView(APIView):
 
 
     def patch(self, request, pk):
+        person = get_object_or_404(Person, pk=request.user.id)
 
-        task_folder = get_object_or_404(TaskFolder, pk=pk, person=request.user.id)
+        task_folder = get_object_or_404(TaskFolder, pk=pk, person=person)
 
         serializer = TaskFolderSerializer(instance=task_folder, data=request.data)
 
