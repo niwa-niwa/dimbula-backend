@@ -4,27 +4,10 @@ from rest_framework.serializers import SerializerMethodField
 from task.models import(
     Task, TaskFolder, TaskSection, SubTask
 )
-from person.models import Person
 from v1.serializers.person_serializers import PersonSerializer
 
 
-class _PersonInfo():
-    '''
-        This is private class. 
-        the class should be super class and then child class have syntax
-        person_info = SerializerMethodField() 
-        fields = [
-            ...etc,
-            'person_info',
-        ]
-    '''
-    def get_person_info(self, obj):
-        person = PersonSerializer(Person.objects.get(id=obj.person.id)).data
-        return person
-
-
-class TaskFolderSerializer(serializers.ModelSerializer, _PersonInfo):
-    person_info = SerializerMethodField()
+class TaskFolderSerializer(serializers.ModelSerializer):
     task_count = SerializerMethodField()
 
     class Meta:
@@ -33,22 +16,18 @@ class TaskFolderSerializer(serializers.ModelSerializer, _PersonInfo):
             'id',
             'name',
             'person',
-            'person_info',
-            'created_at',
-            'updated_at',
             'task_count',
+            'updated_at',
+            'created_at',
         ]
-        extra_kwargs = {
-            'person': {'write_only':True},
-        }
 
     def get_task_count(self, obj):
         task_count = Task.objects.filter(taskFolder=obj.id).count()
         return task_count
 
 
-class TaskFolderDetailSerializer(serializers.ModelSerializer, _PersonInfo):
-    person_info = SerializerMethodField()
+class TaskFolderDetailSerializer(serializers.ModelSerializer):
+    person = PersonSerializer()
     tasks = SerializerMethodField()
     taskSections = SerializerMethodField()
 
@@ -58,11 +37,10 @@ class TaskFolderDetailSerializer(serializers.ModelSerializer, _PersonInfo):
             'id',
             'name',
             'person',
-            'person_info',
-            'created_at',
-            'updated_at',
             'tasks',
             'taskSections',
+            'updated_at',
+            'created_at',
         ]
         extra_kwargs = {
             'person': {'write_only':True},
@@ -93,6 +71,8 @@ class TaskSectionSerializer(serializers.ModelSerializer):
             'default',
             'taskFolder',
             'person',
+            'updated_at',
+            'created_at',
         ]
 
 
@@ -104,12 +84,14 @@ class TaskSerializer(serializers.ModelSerializer):
             'name',
             'memo',
             'is_done',
+            'is_star',
+            'start_date',
+            'due_date',
             'taskSection',
             'taskFolder',
             'person',
-            'start_date',
-            'due_date',
-            'is_star'
+            'updated_at',
+            'created_at',
         ]
 
 
@@ -126,13 +108,15 @@ class TaskDetailSerializer(serializers.ModelSerializer):
             'name',
             'memo',
             'is_done',
+            'is_star',
+            'start_date',
+            'due_date',
             'taskSection',
             'taskFolder',
             'subTasks',
             'person',
-            'start_date',
-            'due_date',
-            'is_star'
+            'updated_at',
+            'created_at',
         ]
 
     def get_subTasks(self, obj):
@@ -151,5 +135,7 @@ class SubTaskSerializer(serializers.ModelSerializer):
             'name',
             'is_done',
             'task',
-            'person'
+            'person',
+            'updated_at',
+            'created_at',
         ]
