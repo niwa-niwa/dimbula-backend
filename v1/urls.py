@@ -24,6 +24,7 @@ urlpatterns = [
     path('task-folders/create/', TaskFolderView.as_view(), name='task-folder_create'),
     path('task-folders/edit/<pk>/', TaskFolderView.as_view(), name='task-folder_edit'),
     path('task-folders/delete/<pk>/', TaskFolderView.as_view(), name='task-folder_delete'),
+    path('task-folders/<pk>/', TaskFolderDetailView.as_view(), name='task-folder_detail'),
 
     path('task-sections/', TaskSectionView.as_view(), name='task-section_list'),
     path('task-sections/create/', TaskSectionView.as_view(), name='task-section_create'),

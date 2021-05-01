@@ -50,6 +50,14 @@ class TestTaskFolder(APITestCase):
         self.assertEqual(responce.data, serializer.data)
 
 
+    def test_get_TaskFolderDetail(self):
+        folder = create_taskFolder(self.person)
+        create_taskFolder(self.person, "todo")
+        self.assertEqual(self.__count(), 2)
+        response= self.client.get(ROOT_URL + TASKFOLDER + str(folder.id) + "/")
+        self.assertEqual(response.data['id'], str(folder.id))
+
+
     def test_patch_TaskFolder(self):
         folder = create_taskFolder(self.person)
         self.assertEqual(self.__count(), 1)
