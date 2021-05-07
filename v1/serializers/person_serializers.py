@@ -11,4 +11,8 @@ class PersonSerializer(serializers.ModelSerializer):
             'name',
             'email',
             'photo_url',
+            'created_at',
+            'updated_at',
+            'last_login',
+            'is_superuser',
         ]

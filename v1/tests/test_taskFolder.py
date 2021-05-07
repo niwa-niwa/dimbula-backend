@@ -44,10 +44,29 @@ class TestTaskFolder(APITestCase):
         self.assertEqual(self.__count(), 1)
 
         responce = self.client.get(ROOT_URL + TASKFOLDER)
-        task_folders = TaskFolder.objects.filter(person=self.person.id)
+        task_folders = TaskFolder.objects.filter(person=self.person)
         serializer = TaskFolderSerializer(task_folders, many=True)
         self.assertEqual(responce.status_code, status.HTTP_200_OK)
         self.assertEqual(responce.data, serializer.data)
+
+
+    def test_get_TaskFolderDetail(self):
+        folder = create_taskFolder(self.person)
+        section = create_taskSection(self.person, folder)
+        task = create_task(self.person, folder, section)
+        sub_task = create_subTask(self.person, task)
+
+        create_taskFolder(self.person, "todo")
+        self.assertEqual(self.__count(), 2)
+        response= self.client.get(ROOT_URL + TASKFOLDER + str(folder.id) + "/")
+        serializer = TaskFolderDetailSerializer(instance=folder)
+        section_json = TaskSectionSerializer(instance=section)
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['id'], str(folder.id))
+        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.data['taskSections'][0]['name'], section.name)
+        self.assertEqual(response.data['tasks'][0]['name'], task.name)
 
 
     def test_patch_TaskFolder(self):

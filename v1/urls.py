@@ -24,6 +24,7 @@ urlpatterns = [
     path('task-folders/create/', TaskFolderView.as_view(), name='task-folder_create'),
     path('task-folders/edit/<pk>/', TaskFolderView.as_view(), name='task-folder_edit'),
     path('task-folders/delete/<pk>/', TaskFolderView.as_view(), name='task-folder_delete'),
+    path('task-folders/<pk>/', TaskFolderDetailView.as_view(), name='task-folder_detail'),
 
     path('task-sections/', TaskSectionView.as_view(), name='task-section_list'),
     path('task-sections/create/', TaskSectionView.as_view(), name='task-section_create'),
@@ -34,6 +35,7 @@ urlpatterns = [
     path('tasks/create/', TaskView.as_view(), name="task_create"),
     path('tasks/edit/<pk>/', TaskView.as_view(), name="task_edit"),
     path('tasks/delete/<pk>/', TaskView.as_view(), name="task_delete"),
+    path('tasks/<pk>/', TaskDetailView.as_view(), name="task_detail"),
 
     path('sub-tasks/', SubTaskView.as_view(), name="sub-task_list"),
     path('sub-tasks/create/', SubTaskView.as_view(), name="sub-task_create"),

@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
 from task.models import Task
-from v1.serializers.task_serializers import TaskSerializer
+from v1.serializers.task_serializers import TaskDetailSerializer, TaskSerializer
 
 from .fake_data import *
 
@@ -84,3 +84,22 @@ class TestTask(APITestCase):
         response = self.client.delete(ENDPOINT + 'delete/' + str(task.id) + "/")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(self.__count(), 0)
+
+
+    def test_get_task_detail(self):
+        self.assertEqual(self.__count(), 0)
+
+        folder = create_taskFolder(self.person)
+        section = create_taskSection(self.person, folder)
+        task = create_task(self.person, folder, section)
+        sub_task = create_subTask(self.person, task)
+
+        self.assertEqual(self.__count(), 1)
+
+        response = self.client.get(ENDPOINT + str(task.id) + '/')
+        serializer = TaskDetailSerializer(instance=task)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, serializer.data )
+        self.assertEqual(response.data['taskFolder']['name'], task.taskFolder.name)
+        self.assertEqual(response.data['taskSection']['name'], task.taskSection.name)
+        self.assertEqual(len(response.data['subTasks']), 1)
