@@ -21,7 +21,10 @@ urlpatterns = [
     path('admin/delete/<pk>/', AdminView.as_view(), name="admin_person_delete"),
 
     path('inbox/', InboxView.as_view(), name='inbox_list'),
-    
+    path('today/', TodayView.as_view(), name='today_list'),
+    path('stars/', StarsView.as_view(), name='stars_list'),
+    path('all-tasks/', AllTasksView.as_view(), name='all_tasks'),
+
     path('task-folders/', TaskFolderView.as_view(), name='task-folder_list'),
     path('task-folders/create/', TaskFolderView.as_view(), name='task-folder_create'),
     path('task-folders/edit/<pk>/', TaskFolderView.as_view(), name='task-folder_edit'),
