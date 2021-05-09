@@ -64,11 +64,6 @@ class TaskSection(models.Model):
         max_length=32,
     )
 
-    default = models.BooleanField(
-        verbose_name="default",
-        default=False
-    )
-
     taskFolder = models.ForeignKey(
         TaskFolder,
         verbose_name='task folder',
@@ -119,7 +114,7 @@ class Task(models.Model):
     memo = models.TextField(
         verbose_name='memo',
         blank=True,
-        null=True
+        default="",
     )
 
     is_done = models.BooleanField(
@@ -139,6 +134,8 @@ class Task(models.Model):
         TaskFolder,
         db_index=True,
         on_delete=models.CASCADE,
+        blank=True,
+        null=True,
     )
 
     person = models.ForeignKey(
