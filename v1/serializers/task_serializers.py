@@ -68,7 +68,6 @@ class TaskSectionSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'name',
-            'default',
             'taskFolder',
             'person',
             'updated_at',

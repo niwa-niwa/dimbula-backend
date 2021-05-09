@@ -7,15 +7,21 @@ from person.models import Person
 from v1.serializers.task_serializers import *
 
 
+class InboxView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        tasks = Task.objects.filter(person=request.user.id, taskFolder__isnull=True )
+        serializer = TaskDetailSerializer(tasks, many=True)
+        return Response(serializer.data, status.HTTP_200_OK)
+
+
 class TaskFolderDetailView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, pk):
-
         task_folder = get_object_or_404(TaskFolder, pk=pk, person=request.user.id)
-
         serializer = TaskFolderDetailSerializer(instance=task_folder)
-
         return Response(serializer.data, status.HTTP_200_OK)
 
 
