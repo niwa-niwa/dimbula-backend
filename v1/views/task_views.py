@@ -12,7 +12,7 @@ class InboxView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     def get(self, request):
         tasks = Task.objects.filter(person=request.user.id, taskFolder__isnull=True )
-        serializer = TaskDetailSerializer(tasks, many=True)
+        serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data, status.HTTP_200_OK)
 
 
@@ -20,7 +20,7 @@ class TodayView(APIView):
     permission_classes = [permissions.IsAuthenticated]  
     def get(self, request):
         tasks = Task.objects.filter(person=request.user.id, due_date__date=date.today() )
-        serializer = TaskDetailSerializer(tasks, many=True)
+        serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data, status.HTTP_200_OK)
 
 
@@ -28,7 +28,7 @@ class StarsView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     def get(self, request):
         tasks = Task.objects.filter(person=request.user.id, is_star=True )
-        serializer = TaskDetailSerializer(tasks, many=True)
+        serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data, status.HTTP_200_OK)
 
 
@@ -36,7 +36,7 @@ class AllTasksView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     def get(self, request):
         tasks = Task.objects.filter(person=request.user.id)
-        serializer = TaskDetailSerializer(tasks, many=True)
+        serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data, status.HTTP_200_OK)
 
 
