@@ -1,3 +1,4 @@
+from django.db.models.deletion import SET_NULL
 from person.models import Person
 from task.models import *
 
@@ -117,7 +118,7 @@ def create_taskSection(
 def create_task(
     person: Person,
     taskFolder: TaskFolder,
-    taskSection: TaskSection,
+    taskSection=None,
     name = "do my landry",) -> Task:
     """
     crete a task

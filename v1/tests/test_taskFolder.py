@@ -11,7 +11,7 @@ TASKFOLDER = "task-folders/"
 
 
 class TestTaskFolder(APITestCase):
-    print("Start Task Test !!")
+    print("Start Task Folder Test !!")
 
 
     def __count(self)->int:
@@ -40,7 +40,7 @@ class TestTaskFolder(APITestCase):
 
 
     def test_get_TaskFolder(self):
-        create_taskFolder(self.person)
+        folder = create_taskFolder(self.person)
         self.assertEqual(self.__count(), 1)
 
         responce = self.client.get(ROOT_URL + TASKFOLDER)
@@ -48,6 +48,11 @@ class TestTaskFolder(APITestCase):
         serializer = TaskFolderSerializer(task_folders, many=True)
         self.assertEqual(responce.status_code, status.HTTP_200_OK)
         self.assertEqual(responce.data, serializer.data)
+        self.assertEqual(responce.data[0]['task_count'],0)
+
+        task = create_task(self.person, folder)
+        responce = self.client.get(ROOT_URL + TASKFOLDER)
+        self.assertEqual(responce.data[0]['task_count'],1)
 
 
     def test_get_TaskFolderDetail(self):
