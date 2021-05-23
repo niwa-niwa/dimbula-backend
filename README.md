@@ -7,6 +7,7 @@ Python Django REST Framework
 
 ## .env is requirement
 - DEBUG=boolean
+- ADMIN_URL=admin/
 - ALLOWED_HOSTS=localhost,127.0.0.1,etc
 - FRONTEND_URL=http://localhost:3000
 - FIREBASE_TYPE=
