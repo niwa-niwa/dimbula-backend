@@ -189,3 +189,8 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     env('FRONTEND_URL'),
 ]
+
+
+# for Heroku
+import django_heroku
+django_heroku.settings(locals())
