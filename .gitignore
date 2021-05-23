@@ -141,4 +141,4 @@ cython_debug/
 
 !__init__.py
 
-dimbula-dev-firebase-admin-sdk.json
+firebase-info.json

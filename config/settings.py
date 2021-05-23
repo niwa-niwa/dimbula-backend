@@ -145,12 +145,31 @@ REST_FRAMEWORK = {
     ]
 }
 
+
+#if firebase secret information .json is not exist generate json file
+file_name = 'firebase-info.json'
+if not os.path.exists(os.path.join(BASE_DIR, file_name)):
+    import json
+    info = {
+        "type": env('FIREBASE_TYPE'),
+        "project_id": env('FIREBASE_PROJECT_ID'),
+        "private_key_id": env('FIREBASE_PRIVATE_KEY_ID'),
+        "private_key": env('FIREBASE_PRIVATE_KEY').replace("\\n", "\n"),
+        "client_email": env('FIREBASE_CLIENT_EMAIL'),
+        "client_id": env('FIREBASE_CLIENT_ID'),
+        "auth_uri": env('FIREBASE_AUTH_URI'),
+        "token_uri": env('FIREBASE_TOKEN_URI'),
+        "auth_provider_x509_cert_url": env('FIREBASE_AUTH_PROVIDER_X509_CERT_URI'),
+        "client_x509_cert_url": env('FIREBASE_CLIENT_X509_CERT_URL')
+    }
+    with open(os.path.join(BASE_DIR, file_name), 'w') as outfile:
+        json.dump(info, outfile)
+
 # <==== Firebase Authentication settings
-FIREBASE_AUTH_KEY_PATH = BASE_DIR+"/config/dimbula-dev-firebase-admin-sdk.json"
 FIREBASE_AUTH = {
     # path to JSON file with firebase secrets
     'FIREBASE_SERVICE_ACCOUNT_KEY':
-        os.getenv('FIREBASE_SERVICE_ACCOUNT_KEY', FIREBASE_AUTH_KEY_PATH),
+        os.getenv('FIREBASE_SERVICE_ACCOUNT_KEY', os.path.join(BASE_DIR, file_name)),
     # allow creation of new local user in db
     'FIREBASE_CREATE_LOCAL_USER':
         os.getenv('FIREBASE_CREATE_LOCAL_USER', True),
