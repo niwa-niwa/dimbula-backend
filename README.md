@@ -6,7 +6,8 @@ https://drive.google.com/drive/u/0/folders/1ShYItyU1Mpx3Ivyr0SNPE9-N1T5nMY6G
 Python Django REST Framework  
 
 ## .env is requirement
-- DEBUG=boolean
+You can duplicate .env.example to rename .env   
+- DEBUG=True
 - ADMIN_URL=admin/
 - ALLOWED_HOSTS=localhost,127.0.0.1,etc
 - FRONTEND_URL=http://localhost:3000
