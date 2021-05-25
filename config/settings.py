@@ -16,9 +16,9 @@ import os
 import environ
 env = environ.Env()
 # if it doesn't deploys at heroku it would read .env
-# HEROKU_ENV = env.bool('HEROKU_ENV', default=False)
-# if not HEROKU_ENV:
-env.read_env('.env')
+HEROKU_ENV = env.bool('HEROKU_ENV', default=False)
+if not HEROKU_ENV:
+    env.read_env('.env')
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
