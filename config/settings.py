@@ -16,9 +16,9 @@ import os
 import environ
 env = environ.Env()
 # if it doesn't deploys at heroku it would read .env
-HEROKU_ENV = env.bool('HEROKU_ENV', default=False)
-if not HEROKU_ENV:
-    env.read_env('.env')
+# HEROKU_ENV = env.bool('HEROKU_ENV', default=False)
+# if not HEROKU_ENV:
+env.read_env('.env')
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -27,7 +27,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'gcb6xd4s_hu^q!f-hnue4i1#5zrxp4pqsbwdu(^q$cb(y3!*-d'
+SECRET_KEY = env('SECRET_KEY')
+# SECRET_KEY = 'gcb6xd4s_hu^q!f-hnue4i1#5zrxp4pqsbwdu(^q$cb(y3!*-d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
