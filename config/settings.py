@@ -200,11 +200,10 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     env('FRONTEND_URL'),
 ]
-CORS_ALLOWED_ORIGIN_REGEXES = [
-    env('CORS_ALLOWED_ORIGIN_REGEXES')
-    # r"^https://dimbula-\w+-niwa-niwa\.vercel\.app$",
-]
-# print(env('CORS_ALLOWED_ORIGIN_REGEXES'))
+if env('DEBUG'):
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        r"^https://dimbula-\w+-niwa-niwa\.vercel\.app$",
+    ]
 
 
 # for Heroku
