@@ -88,7 +88,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-# if not HEROKU_ENV:
 DATABASES = {
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
@@ -103,14 +102,7 @@ DATABASES = {
         'PORT':'',
     }
 }
-# else :
-    # TODO : is it requirement?
-    # import dj_database_url
-    # db_from_env = dj_database_url.config()
-    # DATABASES = {
-    #     'default': dj_database_url.config()
-    # }
-    
+
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
