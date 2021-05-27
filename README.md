@@ -8,6 +8,7 @@ Python Django REST Framework
 ## .env is requirement
 You can duplicate .env.example to rename .env   
 - DEBUG=True
+- HEROKU_ENV=False // it is not requirement in local environment
 - ADMIN_URL=admin/
 - ALLOWED_HOSTS=localhost,127.0.0.1,etc
 - FRONTEND_URL=http://localhost:3000
@@ -15,6 +16,7 @@ You can duplicate .env.example to rename .env
 - FIREBASE_PROJECT_ID=
 - FIREBASE_PRIVATE_KEY_ID=
 - FIREBASE_PRIVATE_KEY=
+- FIREBASE_CLIENT_EMAIL=
 - FIREBASE_CLIENT_ID=
 - FIREBASE_AUTH_URI=
 - FIREBASE_TOKEN_URI=
