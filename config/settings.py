@@ -104,6 +104,7 @@ if not HEROKU_ENV:
         }
     }
 else :
+    # TODO : is it requirement?
     import dj_database_url
     db_from_env = dj_database_url.config()
     DATABASES = {
@@ -198,6 +199,9 @@ FIREBASE_AUTH = {
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     env('FRONTEND_URL'),
+]
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://dimbula-\w+-niwa-niwa\.vercel\.app$",
 ]
 
 
