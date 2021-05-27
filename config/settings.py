@@ -204,6 +204,7 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
     env('CORS_ALLOWED_ORIGIN_REGEXES')
     # r"^https://dimbula-\w+-niwa-niwa\.vercel\.app$",
 ]
+# print(env('CORS_ALLOWED_ORIGIN_REGEXES'))
 
 
 # for Heroku
