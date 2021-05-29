@@ -137,8 +137,8 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-*/migrations/*
+*/migrations/__pycache__
 
 !__init__.py
 
-dimbula-dev-firebase-admin-sdk.json
+firebase-info.json

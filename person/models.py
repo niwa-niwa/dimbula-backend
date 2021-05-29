@@ -7,7 +7,7 @@ class Person(models.Model):
 
     class Meta:
         db_table = 'person'
-        ordering = ('created_at',)
+        ordering = ['-created_at']
         verbose_name = 'person'
         verbose_name_plural = 'persons'
 
@@ -58,7 +58,7 @@ class Person(models.Model):
     )
 
     # the value is for this app
-    is_admin = models.BooleanField(
+    is_staff = models.BooleanField(
         verbose_name="admin",
         default=False
     )
@@ -67,6 +67,11 @@ class Person(models.Model):
     is_active = models.BooleanField(
         verbose_name="active",
         default=True
+    )
+
+    is_superuser = models.BooleanField(
+        verbose_name="super user",
+        default=False
     )
 
     is_authenticated = models.BooleanField(
@@ -89,7 +94,6 @@ class Person(models.Model):
         verbose_name="updated at",
         auto_now=True
     )
-
 
     def __str__(self):
         return self.name

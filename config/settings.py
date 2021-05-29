@@ -12,6 +12,14 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+# for using .env
+import environ
+env = environ.Env()
+# if it doesn't deploys at heroku it would read .env
+HEROKU_ENV = env.bool('HEROKU_ENV', default=False)
+if not HEROKU_ENV:
+    env.read_env('.env')
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -19,12 +27,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'gcb6xd4s_hu^q!f-hnue4i1#5zrxp4pqsbwdu(^q$cb(y3!*-d'
+SECRET_KEY = env('SECRET_KEY')
+# SECRET_KEY = 'gcb6xd4s_hu^q!f-hnue4i1#5zrxp4pqsbwdu(^q$cb(y3!*-d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 
 # Application definition
@@ -37,15 +46,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'corsheaders',
     'firebase_auth',
 
-    'person.apps.PersonConfig',
     'v1.apps.V1Config',
+    'person.apps.PersonConfig',
+    'task.apps.TaskConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -76,7 +88,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
 DATABASES = {
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
@@ -137,12 +148,31 @@ REST_FRAMEWORK = {
     ]
 }
 
+
+#if firebase secret information .json is not exist generate json file
+file_name = 'firebase-info.json'
+if not os.path.exists(os.path.join(BASE_DIR, file_name)):
+    import json
+    info = {
+        "type": env('FIREBASE_TYPE'),
+        "project_id": env('FIREBASE_PROJECT_ID'),
+        "private_key_id": env('FIREBASE_PRIVATE_KEY_ID'),
+        "private_key": env('FIREBASE_PRIVATE_KEY').replace("\\n", "\n"),
+        "client_email": env('FIREBASE_CLIENT_EMAIL'),
+        "client_id": env('FIREBASE_CLIENT_ID'),
+        "auth_uri": env('FIREBASE_AUTH_URI'),
+        "token_uri": env('FIREBASE_TOKEN_URI'),
+        "auth_provider_x509_cert_url": env('FIREBASE_AUTH_PROVIDER_X509_CERT_URI'),
+        "client_x509_cert_url": env('FIREBASE_CLIENT_X509_CERT_URL')
+    }
+    with open(os.path.join(BASE_DIR, file_name), 'w') as outfile:
+        json.dump(info, outfile)
+
 # <==== Firebase Authentication settings
-FIREBASE_AUTH_KEY_PATH = BASE_DIR+"/config/dimbula-dev-firebase-admin-sdk.json"
 FIREBASE_AUTH = {
     # path to JSON file with firebase secrets
     'FIREBASE_SERVICE_ACCOUNT_KEY':
-        os.getenv('FIREBASE_SERVICE_ACCOUNT_KEY', FIREBASE_AUTH_KEY_PATH),
+        os.getenv('FIREBASE_SERVICE_ACCOUNT_KEY', os.path.join(BASE_DIR, file_name)),
     # allow creation of new local user in db
     'FIREBASE_CREATE_LOCAL_USER':
         os.getenv('FIREBASE_CREATE_LOCAL_USER', True),
@@ -157,3 +187,17 @@ FIREBASE_AUTH = {
         os.getenv('FIREBASE_AUTH_EMAIL_VERIFICATION', True),
 }
 # ====>
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    env('FRONTEND_URL'),
+]
+if env('DEBUG'):
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        r"^https://dimbula-\w+-niwa-niwa\.vercel\.app$",
+    ]
+
+
+# for Heroku
+import django_heroku
+django_heroku.settings(locals())

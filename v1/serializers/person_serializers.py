@@ -8,12 +8,11 @@ class PersonSerializer(serializers.ModelSerializer):
         model = Person
         fields = [
             'id',
-            'firebase_id',
             'name',
             'email',
-            'email_verified',
             'photo_url',
-            'provider_id',
-            'is_admin',
-            'is_active',
+            'created_at',
+            'updated_at',
+            'last_login',
+            'is_superuser',
         ]
