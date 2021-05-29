@@ -11,9 +11,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import environ
+import django_heroku
 
 # for using .env
-import environ
 env = environ.Env()
 # if it doesn't deploys at heroku it would read .env
 HEROKU_ENV = env.bool('HEROKU_ENV', default=False)
@@ -31,7 +32,10 @@ SECRET_KEY = env('SECRET_KEY')
 # SECRET_KEY = 'gcb6xd4s_hu^q!f-hnue4i1#5zrxp4pqsbwdu(^q$cb(y3!*-d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+if env('DEBUG') == 'True' :
+    DEBUG = True
+else :
+    DEBUG = False
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
@@ -63,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -70,7 +75,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -138,8 +143,15 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -193,11 +205,11 @@ CORS_ALLOWED_ORIGINS = [
     env('FRONTEND_URL'),
 ]
 if env('DEBUG'):
+    # for preview environment in vercel
     CORS_ALLOWED_ORIGIN_REGEXES = [
         r"^https://dimbula-\w+-niwa-niwa\.vercel\.app$",
     ]
 
 
 # for Heroku
-import django_heroku
 django_heroku.settings(locals())
