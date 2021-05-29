@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.views.generic import TemplateView
 from django.contrib import admin
 from django.urls import path, include
 import environ
@@ -20,6 +21,7 @@ env = environ.Env()
 admin_url = env.str('ADMIN_URL', default="admin/")
 
 urlpatterns = [
+    path("", TemplateView.as_view(template_name="index.html"), name='index'),
     path(admin_url, admin.site.urls),
     path('api/v1/', include('v1.urls')),
 ]
