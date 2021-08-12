@@ -1,4 +1,9 @@
+import os
+from config.settings import MEDIA_ROOT
+from wsgiref.util import FileWrapper
 from datetime import date
+from django.http.response import HttpResponse
+from rest_framework.parsers import MultiPartParser
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework import status, permissions
@@ -200,4 +205,28 @@ class SubTaskView(APIView):
     def delete(self, request, pk):
         sub_task = get_object_or_404(SubTask, pk=pk, person=request.user.id)
         sub_task.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class FileUploadView(APIView):
+    parser_classes = [MultiPartParser]
+
+    def get(self, request, filename, format=None) :
+        file_path = os.path.join(MEDIA_ROOT, filename)
+        file = open(file_path, 'rb')
+        response = HttpResponse(FileWrapper(file), content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        return response
+
+    def post(self, request, filename, format=None):
+        file = request.data['file']
+        path = os.path.join(MEDIA_ROOT, filename)
+        with open(path, 'wb+') as destination :
+            for chunk in file.chunks() :
+                destination.write(chunk)
+        return Response(status=204)
+
+    def delete(self, request, filename, format=None) :
+        file_path = os.path.join(MEDIA_ROOT, filename)
+        os.remove(file_path)
         return Response(status=status.HTTP_204_NO_CONTENT)

@@ -142,3 +142,5 @@ cython_debug/
 !__init__.py
 
 firebase-info.json
+
+media/

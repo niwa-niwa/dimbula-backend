@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 from rest_framework import routers
 
 from .views import *
@@ -47,4 +47,5 @@ urlpatterns = [
     path('sub-tasks/edit/<pk>/', SubTaskView.as_view(), name="sub-task_edit"),
     path('sub-tasks/delete/<pk>/', SubTaskView.as_view(), name="sub-task_delete"),
 
+    re_path(r'^upload/(?P<filename>[^/]+)$', FileUploadView.as_view(), name="file-upload"),
 ]
