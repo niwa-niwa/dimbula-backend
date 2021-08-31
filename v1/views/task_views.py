@@ -208,6 +208,8 @@ class SubTaskView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+# TODO: implement model for uploaded files
+# TODO: implement insert DB when it gets a request
 class FileUploadView(APIView):
     parser_classes = [MultiPartParser]
 
